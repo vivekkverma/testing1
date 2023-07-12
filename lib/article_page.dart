@@ -7,7 +7,7 @@ class ArticlePage extends StatelessWidget {
 
   String _truncateSummary(String summary) {
     final words = summary.split(' ');
-    if (words.length <= 150) {
+    if (words.length <= 160) {
       return summary;
     }
     final truncatedWords = words.sublist(0, 150);
