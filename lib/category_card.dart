@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'news_page.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;
@@ -18,7 +19,12 @@ class CategoryCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
         onTap: () {
-          // Handle category card tap
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewsPage(category: category),
+            ),
+          );
         },
         child: Column(
           children: [

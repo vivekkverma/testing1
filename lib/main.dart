@@ -18,7 +18,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
-        '/categories': (context) => CategoriesPage(),
+        '/categories': (context) => CategoriesPage(
+              category: '', // Provide the category argument here
+              articles: [], // Provide the articles argument here
+            ),
         '/profile': (context) => ProfilePage(),
       },
     );
