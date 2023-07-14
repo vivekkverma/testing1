@@ -44,6 +44,13 @@ class ProfilePage extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+            title: Text('Notifications'),
+            trailing: Switch(
+              value: false,
+              onChanged: (value) {},
+            ),
+          ),
         ],
       ),
     );
