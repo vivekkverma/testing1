@@ -35,6 +35,15 @@ class _NewsPageState extends State<NewsPage> {
     }
   }
 
+  void viewArticleDetail(dynamic article) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ArticlePage(article: article),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +57,37 @@ class _NewsPageState extends State<NewsPage> {
           final headline = article['title'];
           final imageUrl = article['urlToImage'];
 
-          return ListTile(
-            leading:
-                imageUrl != null ? Image.network(imageUrl) : Icon(Icons.image),
-            title: Text(headline ?? 'No headline available'),
+          return GestureDetector(
+            onTap: () => viewArticleDetail(article),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    imageUrl != null
+                        ? Image.network(
+                      imageUrl,
+                      width: double.infinity,
+                      height: 150.0,
+                      fit: BoxFit.cover,
+                    )
+                        : Container(),
+                    SizedBox(height: 8.0),
+                    Text(
+                      headline ?? 'No headline available',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -59,23 +95,43 @@ class _NewsPageState extends State<NewsPage> {
   }
 }
 
-/*import 'package:flutter/material.dart';
+class ArticlePage extends StatelessWidget {
+  final dynamic article;
 
-class NewsPage extends StatelessWidget {
-  final String category;
-
-  const NewsPage({required this.category});
+  const ArticlePage({required this.article});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(category),
+        title: Text('Article'),
       ),
-      body: Center(
-        child: Text('Display news for $category here'),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(article['urlToImage']),
+            SizedBox(height: 16.0),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                article['title'],
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                article['description'],
+                style: TextStyle(fontSize: 16.0),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-*/
