@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'category_card.dart';
+//import 'news_page.dart';
 
 class CategoriesPage extends StatelessWidget {
+  final String category;
+  final List<Map<String, dynamic>> articles;
+
+  CategoriesPage({required this.category, required this.articles});
   final List<Map<String, String>> categories = [
     {
       'category': 'Business',
