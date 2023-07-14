@@ -48,6 +48,12 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: fetchNewsArticles,
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -73,7 +79,10 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ArticlePage(article: article, sentiment: Sentiment.negative,),
+                        builder: (context) => ArticlePage(
+                          article: article,
+                          sentiment: Sentiment.negative,
+                        ),
                       ),
                     );
                   },

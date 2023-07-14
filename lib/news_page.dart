@@ -54,6 +54,12 @@ class _NewsPageState extends State<NewsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: newsArticles.length,
@@ -61,6 +67,7 @@ class _NewsPageState extends State<NewsPage> {
           final article = newsArticles[index];
           final headline = removeSourceFromHeadline(article['title']);
           final imageUrl = article['urlToImage'];
+          final sentiment = Sentiment.negative; // Replace with actual sentiment
 
           return GestureDetector(
             onTap: () => viewArticleDetail(article),
@@ -68,32 +75,52 @@ class _NewsPageState extends State<NewsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: imageUrl != null
-                          ? Image.network(
-                        imageUrl,
-                        width: double.infinity,
-                        height: 150.0,
-                        fit: BoxFit.cover,
-                      )
-                          : Container(),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      headline ?? 'No headline available',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: imageUrl != null
+                            ? Image.network(
+                          imageUrl,
+                          width: double.infinity,
+                          height: 150.0,
+                          fit: BoxFit.cover,
+                        )
+                            : Container(),
+                      ),
+                      SizedBox(height: 8.0),
+                      Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Text(
+                          headline ?? 'No headline available',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 8.0,
+                    right: 8.0,
+                    child: Container(
+                      padding: EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        color: getColorForSentiment(sentiment),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        getSentimentIcon(sentiment),
+                        color: Colors.white,
+                        size: 20.0,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -109,5 +136,29 @@ class _NewsPageState extends State<NewsPage> {
       return headline.replaceFirst(match.group(0)!, '').trim();
     }
     return headline;
+  }
+
+  IconData getSentimentIcon(Sentiment sentiment) {
+    switch (sentiment) {
+      case Sentiment.positive:
+        return Icons.sentiment_satisfied;
+      case Sentiment.negative:
+        return Icons.sentiment_dissatisfied;
+      case Sentiment.neutral:
+      default:
+        return Icons.sentiment_neutral;
+    }
+  }
+
+  Color getColorForSentiment(Sentiment sentiment) {
+    switch (sentiment) {
+      case Sentiment.positive:
+        return Colors.green;
+      case Sentiment.negative:
+        return Colors.red;
+      case Sentiment.neutral:
+      default:
+        return Colors.grey;
+    }
   }
 }
