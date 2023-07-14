@@ -58,7 +58,6 @@ class ArticlePage extends StatelessWidget {
               style: TextStyle(fontSize: 16.0),
             ),
             SizedBox(height: 16.0),
-            // Add more article details here
           ],
         ),
       ),

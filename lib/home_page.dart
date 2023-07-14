@@ -4,120 +4,6 @@ import 'dart:convert';
 import 'article_page.dart';
 import 'news_card.dart';
 import 'taskbar.dart';
-import 'categories_page.dart';
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> newsArticles = []; // Update the type here
-
-  @override
-  void initState() {
-    super.initState();
-    fetchNewsArticles();
-  }
-
-  Future<void> fetchNewsArticles() async {
-    final response = await http.get(
-      Uri.parse(
-          'https://newsapi.org/v2/top-headlines?country=us&apiKey=3c965853bfa44560a63fe241117a5d4e'),
-    );
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      final articlesData = jsonData['articles'];
-      setState(() {
-        newsArticles = List<Map<String, dynamic>>.from(articlesData);
-      });
-    } else {
-      print('Failed to fetch news articles');
-    }
-  }
-
-  void navigateToCategoryPage(String category) async {
-    final filteredArticles = newsArticles
-        .where((article) => article['category'] == category)
-        .toList();
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CategoriesPage(
-          category: category,
-          articles: filteredArticles,
-        ),
-      ),
-    );
-    if (result != null) {
-      // Handle the result from the CategoryPage if needed
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'P.I.G.E.O.N.',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.category),
-            onPressed: () {
-              navigateToCategoryPage('All');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: newsArticles.length,
-              itemBuilder: (context, index) {
-                final article = newsArticles[index];
-                final imageUrl = article['urlToImage'];
-                final headline = article['title'];
-
-                // Exclude the card if the image URL or headline is null
-                if (imageUrl == null || headline == null) {
-                  return Container();
-                }
-
-                return NewsCard(
-                  imageUrl: imageUrl,
-                  headline: headline,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ArticlePage(article: article),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          TaskBar(),
-        ],
-      ),
-    );
-  }
-}
-
-
-
-
-/*import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'article_page.dart';
-import 'news_card.dart';
-import 'taskbar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -135,7 +21,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchNewsArticles() async {
     final response = await http.get(
-      Uri.parse('https://newsapi.org/v2/top-headlines?country=us&apiKey=3c965853bfa44560a63fe241117a5d4e'),
+      Uri.parse(
+          'https://newsapi.org/v2/top-headlines?country=us&apiKey=3c965853bfa44560a63fe241117a5d4e'),
     );
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
@@ -167,7 +54,6 @@ class _HomePageState extends State<HomePage> {
                 final imageUrl = article['urlToImage'];
                 final headline = article['title'];
 
-                // Exclude the card if the image URL or headline is null
                 if (imageUrl == null || headline == null) {
                   return Container();
                 }
@@ -193,4 +79,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-*/

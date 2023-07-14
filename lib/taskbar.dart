@@ -10,21 +10,18 @@ class TaskBar extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              // Navigate to home page
               Navigator.pushNamed(context, '/');
             },
           ),
           IconButton(
             icon: Icon(Icons.category),
             onPressed: () {
-              // Navigate to categories page
               Navigator.pushNamed(context, '/categories');
             },
           ),
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              // Navigate to user profile page
               Navigator.pushNamed(context, '/profile');
             },
           ),

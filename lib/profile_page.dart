@@ -1,26 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'theme_notifier.dart';
 
-class ProfilePage extends StatefulWidget {
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  bool isDarkModeEnabled = false;
-  bool areNotificationsEnabled = true;
-
-  void _toggleDarkMode(bool value) {
-    setState(() {
-      isDarkModeEnabled = value;
-    });
-  }
-
-  void _toggleNotifications(bool value) {
-    setState(() {
-      areNotificationsEnabled = value;
-    });
-  }
-
+class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,19 +30,19 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: 75.0),
-          ListTile(
-            title: Text('Dark Mode'),
-            trailing: Switch(
-              value: isDarkModeEnabled,
-              onChanged: _toggleDarkMode,
-            ),
-          ),
-          ListTile(
-            title: Text('Notifications'),
-            trailing: Switch(
-              value: areNotificationsEnabled,
-              onChanged: _toggleNotifications,
-            ),
+          Consumer<ThemeNotifier>(
+            builder: (context, themeNotifier, _) {
+              return ListTile(
+                title: Text('Dark Mode'),
+                trailing: Switch(
+                  value: themeNotifier.currentTheme == ThemeMode.dark,
+                  onChanged: (value) {
+                    final newTheme = value ? ThemeMode.dark : ThemeMode.light;
+                    themeNotifier.setTheme(newTheme);
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

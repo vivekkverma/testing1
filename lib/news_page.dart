@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'article_page.dart';
 
 class NewsPage extends StatefulWidget {
   final String category;
@@ -90,47 +91,6 @@ class _NewsPageState extends State<NewsPage> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class ArticlePage extends StatelessWidget {
-  final dynamic article;
-
-  const ArticlePage({required this.article});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Article'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(article['urlToImage']),
-            SizedBox(height: 16.0),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                article['title'],
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                article['description'],
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
