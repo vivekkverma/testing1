@@ -40,7 +40,7 @@ class ArticlePage extends StatelessWidget {
               child: Text(
                 removeSourceFromHeadline(article['title']),
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),

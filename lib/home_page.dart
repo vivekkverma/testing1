@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   Sentiment getSentimentForArticle(dynamic article) {
     // Implement your logic to determine the sentiment for the article here
     // Return the appropriate Sentiment enum value based on the sentiment
-    return Sentiment.negative;
+    return Sentiment.positive;
   }
 
   @override
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                         builder: (context) => ArticlePage(
                           article: article,
-                          sentiment: Sentiment.negative,
+                          sentiment: Sentiment.positive,
                         ),
                       ),
                     );
