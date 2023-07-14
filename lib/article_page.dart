@@ -1,33 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'news_card.dart';
 
 class ArticlePage extends StatelessWidget {
   final dynamic article;
   final Sentiment sentiment;
+  final int maxSummaryLength = 150;
 
   const ArticlePage({required this.article, required this.sentiment});
 
   @override
   Widget build(BuildContext context) {
+    Color appBarColor = getColorForSentiment(sentiment);
+    String summary = getSummary(article['description']);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Article'),
+        backgroundColor: appBarColor,
+        actions: [
+          IconButton(
+            onPressed: () => _openOriginalLink(article['url']),
+            icon: Icon(Icons.open_in_browser),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 4.0, // Adjust the height as needed
-              color: getColorForSentiment(sentiment), // Custom function to get color based on sentiment
+            Image.network(
+              article['urlToImage'],
+              fit: BoxFit.cover,
+              width: double.infinity,
             ),
-            SizedBox(height: 16.0),
-            Image.network(article['urlToImage']),
-            SizedBox(height: 16.0),
+            SizedBox(height: 0.0),
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                article['title'],
+                removeSourceFromHeadline(article['title']),
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
@@ -45,6 +56,31 @@ class ArticlePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _openOriginalLink(String url) async {
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrl(url as Uri);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  String removeSourceFromHeadline(String headline) {
+    final regex = RegExp(r' - (.+)$');
+    final match = regex.firstMatch(headline);
+    if (match != null) {
+      return headline.replaceFirst(match.group(0)!, '').trim();
+    }
+    return headline;
+  }
+
+  String getSummary(String description) {
+    String summary = description ?? '';
+    if (summary.length > maxSummaryLength) {
+      summary = summary.substring(0, maxSummaryLength) + '...';
+    }
+    return summary;
   }
 
   Color getColorForSentiment(Sentiment sentiment) {

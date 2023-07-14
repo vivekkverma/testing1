@@ -41,7 +41,10 @@ class _NewsPageState extends State<NewsPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ArticlePage(article: article, sentiment: Sentiment.negative,),
+        builder: (context) => ArticlePage(
+          article: article,
+          sentiment: Sentiment.negative,
+        ),
       ),
     );
   }
@@ -56,7 +59,7 @@ class _NewsPageState extends State<NewsPage> {
         itemCount: newsArticles.length,
         itemBuilder: (context, index) {
           final article = newsArticles[index];
-          final headline = article['title'];
+          final headline = removeSourceFromHeadline(article['title']);
           final imageUrl = article['urlToImage'];
 
           return GestureDetector(
@@ -70,14 +73,17 @@ class _NewsPageState extends State<NewsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    imageUrl != null
-                        ? Image.network(
-                      imageUrl,
-                      width: double.infinity,
-                      height: 150.0,
-                      fit: BoxFit.cover,
-                    )
-                        : Container(),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: imageUrl != null
+                          ? Image.network(
+                        imageUrl,
+                        width: double.infinity,
+                        height: 150.0,
+                        fit: BoxFit.cover,
+                      )
+                          : Container(),
+                    ),
                     SizedBox(height: 8.0),
                     Text(
                       headline ?? 'No headline available',
@@ -94,5 +100,14 @@ class _NewsPageState extends State<NewsPage> {
         },
       ),
     );
+  }
+
+  String removeSourceFromHeadline(String headline) {
+    final regex = RegExp(r' - (.+)$');
+    final match = regex.firstMatch(headline);
+    if (match != null) {
+      return headline.replaceFirst(match.group(0)!, '').trim();
+    }
+    return headline;
   }
 }

@@ -64,7 +64,7 @@ class NewsCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                   child: Text(
-                    headline,
+                    removeSourceFromHeadline(headline),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0,
@@ -92,5 +92,14 @@ class NewsCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String removeSourceFromHeadline(String headline) {
+    final regex = RegExp(r' - (.+)$');
+    final match = regex.firstMatch(headline);
+    if (match != null) {
+      return headline.replaceFirst(match.group(0)!, '').trim();
+    }
+    return headline;
   }
 }
