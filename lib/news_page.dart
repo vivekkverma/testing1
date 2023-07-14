@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_news_app/news_card.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'article_page.dart';
@@ -40,7 +41,7 @@ class _NewsPageState extends State<NewsPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ArticlePage(article: article),
+        builder: (context) => ArticlePage(article: article, sentiment: Sentiment.negative,),
       ),
     );
   }

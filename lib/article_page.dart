@@ -1,66 +1,61 @@
 import 'package:flutter/material.dart';
+import 'news_card.dart';
 
 class ArticlePage extends StatelessWidget {
   final dynamic article;
+  final Sentiment sentiment;
 
-  const ArticlePage({required this.article});
-
-  String _truncateSummary(String summary) {
-    final words = summary.split(' ');
-    if (words.length <= 160) {
-      return summary;
-    }
-    final truncatedWords = words.sublist(0, 150);
-    return truncatedWords.join(' ') + '...';
-  }
-
-  String _extractHeadline(String title) {
-    final parts = title.split(' - ');
-    if (parts.length > 1) {
-      return parts[0];
-    }
-    return title;
-  }
+  const ArticlePage({required this.article, required this.sentiment});
 
   @override
   Widget build(BuildContext context) {
-    final headline = _extractHeadline(article['title']);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Article'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
-                article['urlToImage'],
-                width: double.infinity,
-                height: 200.0,
-                fit: BoxFit.cover,
-              ),
+            Container(
+              height: 4.0, // Adjust the height as needed
+              color: getColorForSentiment(sentiment), // Custom function to get color based on sentiment
             ),
             SizedBox(height: 16.0),
-            Text(
-              headline,
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
+            Image.network(article['urlToImage']),
+            SizedBox(height: 16.0),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                article['title'],
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            SizedBox(height: 8.0),
-            Text(
-              _truncateSummary(article['description']),
-              style: TextStyle(fontSize: 16.0),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                article['description'],
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
-            SizedBox(height: 16.0),
           ],
         ),
       ),
     );
+  }
+
+  Color getColorForSentiment(Sentiment sentiment) {
+    switch (sentiment) {
+      case Sentiment.positive:
+        return Colors.green;
+      case Sentiment.negative:
+        return Colors.red;
+      case Sentiment.neutral:
+      default:
+        return Colors.grey;
+    }
   }
 }
